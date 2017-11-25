@@ -1,6 +1,4 @@
 from random import randint
-import timeit
-
 def fitness(current,target):
     x = 0
     for ind in range(len(target)):
@@ -17,35 +15,15 @@ def randomstring(length):
         string.append(chr(randint(32,126)))
     return ''.join(string)
 def sort(pop, target):
-    
     if len(pop) < 2:
         return pop
     fitnesses = {}
     for i in range(len(pop)):
         fitnesses[pop[i]] = fitness(pop[i], target)
-
-    # 1. get pivot (random element)
     pivot = pop[randint(0, len(pop) - 1)]
-
-    # 2. put all smaller to left, into a group
-    left = [e for e in pop if e is not pivot and fitnesses[e] <= fitnesses[pivot]]
-
-    # 3. put all greater to right, into a group
-    right = [e for e in pop if e is not pivot and fitnesses[e] > fitnesses[pivot]]
-
-    # repeat for those 2 new groups
+    left = [e for e in pop if e is not pivot and fitnesses[e] <= fitnesses[pivot]] #put all smaller to left, into a group
+    right = [e for e in pop if e is not pivot and fitnesses[e] > fitnesses[pivot]] #put all greater to right, into a group
     return sort(left,target) + [pivot] + sort(right,target)
-
-'''
-    changed = True
-    while changed:
-        changed = False
-        for i in range(len(pop) - 1):
-            if fitnesses[pop[i]] > fitnesses[pop[i+1]]:
-                pop[i], pop[i+1] = pop[i+1], pop[i]
-                changed = True
-    return pop
-'''
 def breed(a, b):
     newstr = []
     for i in range(len(a)):
@@ -63,15 +41,6 @@ lowestscore = 50
 population = []
 for i in range(popsize):
     population.append(randomstring(len(targetstr)))
-
-'''
-for i in population:
-    print(i, " : ", fitness(i, targetstr))
-population = sort(population, targetstr)
-print("\n\n")
-for i in population:
-    print(i, " : ", fitness(i, targetstr))
-'''
 
 while lowestscore > 0:
     sort(population, targetstr)

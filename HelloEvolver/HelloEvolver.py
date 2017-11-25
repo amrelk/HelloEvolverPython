@@ -18,11 +18,14 @@ def randomstring(length):
     return ''.join(string)
 
 def sort(pop, target):
+    fitnesses = {}
+    for i in range(len(pop)):
+        fitnesses[pop[i]] = fitness(pop[i], target)
     changed = True
     while changed:
         changed = False
         for i in range(len(pop) - 1):
-            if fitness(pop[i],target) > fitness(pop[i+1],target):
+            if fitnesses[pop[i]] > fitnesses[pop[i+1]]:
                 pop[i], pop[i+1] = pop[i+1], pop[i]
                 changed = True
     return pop
@@ -38,9 +41,9 @@ def breed(a, b):
 
 targetstr = "Hello, World!"
 popsize = 100
-mutationrate = 0.02 #this does nothing - yet
+mutationrate = 0 #this does nothing - yet
 
-lowestscore = 100
+lowestscore = 50
 population = []
 for i in range(popsize):
     population.append(randomstring(len(targetstr)))
@@ -51,7 +54,7 @@ while lowestscore > 0:
     for i in range(int(len(population)/2)-1):
         population[i+int(len(population)/2)] = breed(population[i],population[i+1])
     for i in range(len(population)):
-        if randint(0,10) == 0:
+        if randint(0,mutationrate) == 0:
             population[i] = mutate(population[i])
     sort(population, targetstr)
     lowestscore = fitness(population[0],targetstr)

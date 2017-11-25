@@ -1,13 +1,22 @@
 from random import randint
+def asciidict(start,stop):
+    ascii = {}
+    for i in range(start, stop):
+        ascii[chr(i)] = i
+    return ascii;
 def fitness(current,target):
     x = 0
     for ind in range(len(target)):
-        x += abs(ord(target[ind])-ord(current[ind]))
+        i = ascii[target[ind]]-ascii[current[ind]]
+        if i > 0:
+            x += i
+        else:
+            x -= i
     return x
 def mutate(current):
     arr = [*current]
     ind = randint(0,len(current)-1)
-    arr[ind] = chr(ord(arr[ind]) + randint(-1,1))
+    arr[ind] = chr(ascii[arr[ind]] + randint(-1,1))
     return ''.join(arr)
 def randomstring(length):
     string = []
@@ -33,9 +42,10 @@ def breed(a, b):
             newstr.append(b[i])
     return ''.join(newstr)
 
+ascii = asciidict(10,150)
 targetstr = "Hello, World!"
-popsize = 100
-mutationrate = 0 #the higher the number, the lower the mutation rate - I don't feel like calculating the actual relationship
+popsize = 1000
+mutationrate = 3 #the higher the number, the lower the mutation rate - I don't feel like calculating the actual relationship
 
 lowestscore = 50
 population = []
